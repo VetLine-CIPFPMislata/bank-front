@@ -23,8 +23,9 @@ movimientos!: Movimiento[];
 constructor() {
     this.usuario = {
         id: 1,
-        nombre: 'Álvaro',
-        email: 'q@q.com'
+        username: 'Álvaro',
+        email: 'q@q.com',
+        password: 'password123'
     };
     this.cuentas = [
         {

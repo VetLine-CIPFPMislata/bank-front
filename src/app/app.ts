@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
 
@@ -11,4 +11,6 @@ import { Footer } from "./components/footer/footer";
 })
 export class App {
   protected readonly title = signal('bank-front');
+
+  constructor(public router: Router) {}
 }
