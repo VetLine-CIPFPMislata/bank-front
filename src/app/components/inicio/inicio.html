@@ -11,7 +11,7 @@
     <div class="row">
         @for (cuenta of cuentas; track $index) {
         <div class="col-lg-4">
-            <div class="balance-card" routerLink="/cuentas" routerLinkActive="active">
+            <div class="balance-card" routerLink="/detail-cuenta" routerLinkActive="active">
                 <div class="balance-icon">
                     <i class="bi bi-wallet"></i>
                 </div>
@@ -20,7 +20,7 @@
                 <p class="balance-iban">{{cuenta.iban}}</p>
             </div>
         </div>
-    }
+        }
     </div>
 
     <div class="row">
@@ -49,26 +49,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
-                                    @for (movimiento of movimientos; track movimiento.id) {
-                                        <tr>
-                                            <td>{{ movimiento.fecha | date:'shortDate' }}</td>
-                                            <td>{{ movimiento.concepto }}</td>
-                                            <td [ngClass]="{'text-success': movimiento.importe > 0, 'text-danger': movimiento.importe < 0}">
-                                                {{ movimiento.importe | currency:'EUR' }}
-                                            </td>
-                                            <td [ngClass]="{'text-danger': movimiento.tipo.includes('DEBE'), 'text-success': movimiento.tipo.includes('HABER')}">
-                                                {{ movimiento.tipo }}
-                                            </td>
-                                        </tr>
-                                    }
-                                    @empty {
-                                        <tr>
-                                            <td colspan="4" class="text-center text-muted">
-                                                No hay movimientos recientes
-                                            </td>
-                                        </tr>
-                                    }
+
+                                @for (movimiento of movimientos; track movimiento.id) {
+                                <tr>
+                                    <td>{{ movimiento.fecha | date:'shortDate' }}</td>
+                                    <td>{{ movimiento.concepto }}</td>
+                                    <td
+                                        [ngClass]="{'text-success': movimiento.importe > 0, 'text-danger': movimiento.importe < 0}">
+                                        {{ movimiento.importe | currency:'EUR' }}
+                                    </td>
+                                    <td
+                                        [ngClass]="{'text-danger': movimiento.tipo.includes('DEBE'), 'text-success': movimiento.tipo.includes('HABER')}">
+                                        {{ movimiento.tipo }}
+                                    </td>
+                                </tr>
+                                }
+                                @empty {
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">
+                                        No hay movimientos recientes
+                                    </td>
+                                </tr>
+                                }
                             </tbody>
                         </table>
                     </div>

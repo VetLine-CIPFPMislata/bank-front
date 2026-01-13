@@ -1,0 +1,51 @@
+<div class="cuentas-container">
+    <h2 class="page-title">Mis Tarjetas</h2>
+    <hr class="divider">
+
+    <div class="row">
+        @for (tarjeta of tarjetas; track tarjeta.id; let i = $index) {
+
+        <div class="col-md-3 mb-4">
+            <div class="credit-card shadow">
+                <div class="card-bg-design"></div>
+
+                <div class="card-top d-flex justify-content-between align-items-center">
+                    <div class="chip"></div>
+                    <div class="card-type d-flex align-items-center">
+                        <span class="mx-2 fw-light tracking-wider">CRÉDITO</span>
+                        <button class="card-toggle-btn" (click)="toggleMostrarDatos(tarjeta.id)">
+                            <i class="bi" [class.bi-eye]="!isVisible(tarjeta.id)"
+                                [class.bi-eye-slash]="isVisible(tarjeta.id)"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-middle text-center">
+                    <div class="card-number font-monospace">
+                        {{ formatNumTarjeta(tarjeta.numero, tarjeta.id) }}
+                    </div>
+                </div>
+
+                <div class="card-bottom d-flex justify-content-between align-items-end">
+                    <div class="card-holder flex-grow-1">
+                        <span class="label d-block small opacity-75">Titular</span>
+                        <span class="value fw-medium">{{ tarjeta.titular | uppercase }}</span>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <div class="card-expiry">
+                            <span class="label d-block small opacity-75">Validez</span>
+                            <span class="value fw-medium">{{ isVisible(tarjeta.id) ? tarjeta.fechaCaducidad : '**/**'
+                                }}</span>
+                        </div>
+                        <div class="card-cvv">
+                            <span class="label d-block small opacity-75">CVV</span>
+                            <span class="value fw-medium">{{ isVisible(tarjeta.id) ? tarjeta.cvv : '***' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
