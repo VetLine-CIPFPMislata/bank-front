@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Usuario } from '../../common/usuario';
-import { Cuenta } from '../../common/cuenta';
-import { Movimiento } from '../../common/movimientos';
+import { UsuarioRequest } from '../../Models/usuarioRequest';
+import { Cuenta } from '../../Models/cuenta';
+import { Movimiento } from '../../Models/movimientos';
 import { NgClass } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
 import { DatePipe } from '@angular/common';
@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
   styleUrl: './inicio.scss',
 })
 export class Inicio {
-usuario!: Usuario;
+usuario!: UsuarioRequest;
 cuenta!: Cuenta;
 cuentas!: Cuenta[];
 movimiento!: Movimiento;
@@ -22,9 +22,7 @@ movimientos!: Movimiento[];
 
 constructor() {
     this.usuario = {
-        id: 1,
         username: 'Álvaro',
-        email: 'q@q.com',
         password: 'password123'
     };
     this.cuentas = [

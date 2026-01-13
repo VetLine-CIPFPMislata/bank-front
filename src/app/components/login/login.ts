@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Usuario } from '../../common/usuario';
+import { UsuarioRequest } from '../../Models/usuarioRequest';
 import { LoginService } from '../../services/login-service';
 
 @Component({
@@ -14,35 +14,54 @@ export class Login {
   private loginService = inject(LoginService);
   private router = inject(Router);
 
-  usuario: Usuario = {
-    id: 0,
+  usuario: UsuarioRequest = {
     username: '',
-    email: '',
-    password: ''
+    password: '',
   };
+
+   ngOnInit() {
+    if (this.loginService.isAuthenticated()) {
+      this.router.navigate(['/articulos']);
+    }
+  }
 
   errorMessage: string = '';
   isLoading: boolean = false;
 
-  onSubmit() {
-    this.isLoading = true;
+  onLogin() {
     this.errorMessage = '';
+    this.isLoading = true;
 
     this.loginService.login(this.usuario).subscribe({
-      next: (response: any) => {
-        // Guardar el token que devuelve el backend
-        this.loginService.setToken(response.api_token);
-        // Redirigir al dashboard o página principal
-        this.router.navigate(['/dashboard']);
+      next: (response) => {
+        console.log('Login exitoso:', response);
+
+        this.loginService.setToken(response.token);
+        this.loginService.saveUserName(response.username);
+
+        this.loginService.getCurrentUser().subscribe({
+          next: (user) => {
+            this.isLoading = false;
+            this.router.navigate(['/home']);
+          },
+          error: (error) => {
+            console.error('Error al obtener el usuario:', error);
+            this.isLoading = false;
+            this.router.navigate(['/login']);
+          }
+        });
       },
       error: (error) => {
+        console.error('Error en login:', error);
         this.isLoading = false;
-        this.errorMessage = 'Usuario o contraseña incorrectos';
-        console.error('Error de login:', error);
-      },
-      complete: () => {
-        this.isLoading = false;
+        
+        if (error.status === 401) {
+          this.errorMessage = 'Credenciales incorrectas. Por favor, verifica tu email y contraseña.';
+        } else {
+          this.errorMessage = 'Error al iniciar sesión. Por favor, intenta de nuevo más tarde.';
+        }
       }
     });
+    
   }
 }

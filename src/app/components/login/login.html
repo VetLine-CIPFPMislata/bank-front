@@ -11,13 +11,13 @@
                     <p class="login-subtitle">Inicia sesión en tu cuenta</p>
                 </div>
 
-                <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="login-form">
+                <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
 
                     <div class="form-group">
                         <div class="input-wrapper">
                             <i class="bi bi-person input-icon"></i>
                             <input type="email" id="username" class="form-control login-input"
-                                placeholder="Usuario o correo" required [(ngModel)]="usuario.email" name="username"
+                                placeholder="Usuario o correo" required [(ngModel)]="usuario.username" name="username"
                                 #emailInput="ngModel">
                         </div>
                         @if(emailInput.invalid && emailInput.touched){

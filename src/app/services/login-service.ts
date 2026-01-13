@@ -1,6 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Usuario } from '../common/usuario';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { UsuarioResponse } from '../Models/usuarioResponse';
+import { UsuarioRequest } from '../Models/usuarioRequest';
+import { Usuario } from '../Models/usuario';
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -8,27 +13,54 @@ export class LoginService {
 
   private miHttp = inject(HttpClient);
 
-  private url: string = 'http://localhost:8083/api';
+  private url: string = '/api/auth';
+  //ng serve --proxy-config src/proxy.conf.json
 
   setToken(token: string): void {
-    localStorage.setItem('api_token', token);
+    localStorage.setItem('authToken', token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('api_token');
+    return localStorage.getItem('authToken');
   }
 
   isLoggedIn(): boolean {
     return this.getToken() !== null;
   }
 
-  login(usuario: Usuario) {
-    return this.miHttp.post(this.url + '/login', usuario);
+  saveUserName(username: string): void {
+    localStorage.setItem('userName', username);
+  }
+  login(usuario: UsuarioRequest): Observable<UsuarioResponse> {
+    return this.miHttp.post<UsuarioResponse>(this.url + '/login', usuario);
   }
 
-  logout() {
-    localStorage.removeItem('api_token');
-    return this.miHttp.post(this.url + '/logout', {});
+  logout(): Observable<any> {
+    const token = this.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    
+    return this.miHttp.post(`${this.url}/logout`, {}, { headers });
   }
 
-}
+    clearAuth(): void {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userName');
+  }
+
+    isAuthenticated(): boolean {
+    return this.getToken() !== null;
+
+  }
+
+   getCurrentUser(): Observable<Usuario> {
+    const token = this.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    
+    return this.miHttp.get<Usuario>(`${this.url}/me`, { headers });
+  }
+}  
+
