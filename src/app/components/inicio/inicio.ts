@@ -3,13 +3,13 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UsuarioRequest } from '../../Models/usuarioRequest';
 import { Cuenta } from '../../Models/cuenta';
 import { Movimiento } from '../../Models/movimientos';
-import { NgClass } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
 import { DatePipe } from '@angular/common';
+import { DetailCuentaComponent } from "../detail-cuenta/detail-cuenta";
 
 @Component({
   selector: 'app-inicio',
-  imports: [RouterLink, NgClass, CurrencyPipe, DatePipe, RouterLinkActive],
+  imports: [RouterLink, CurrencyPipe, DatePipe, RouterLinkActive, DetailCuentaComponent],
   templateUrl: './inicio.html',
   styleUrl: './inicio.scss',
 })

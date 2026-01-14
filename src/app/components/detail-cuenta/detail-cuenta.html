@@ -5,7 +5,7 @@
     <div class="row">
         @for (tarjeta of tarjetas; track tarjeta.id; let i = $index) {
 
-        <div class="col-md-3 mb-4">
+        <div class="col-md-3">
             <div class="credit-card shadow">
                 <div class="card-bg-design"></div>
 
@@ -14,8 +14,12 @@
                     <div class="card-type d-flex align-items-center">
                         <span class="mx-2 fw-light tracking-wider">CRÉDITO</span>
                         <button class="card-toggle-btn" (click)="toggleMostrarDatos(tarjeta.id)">
-                            <i class="bi" [class.bi-eye]="!isVisible(tarjeta.id)"
-                                [class.bi-eye-slash]="isVisible(tarjeta.id)"></i>
+                            @if (isVisible(tarjeta.id)) {
+                                <i class="bi bi-eye-slash"></i>
+                            }
+                            @else {
+                                <i class="bi bi-eye"></i>
+                            }
                         </button>
                     </div>
                 </div>
@@ -35,12 +39,25 @@
                     <div class="d-flex gap-3">
                         <div class="card-expiry">
                             <span class="label d-block small opacity-75">Validez</span>
-                            <span class="value fw-medium">{{ isVisible(tarjeta.id) ? tarjeta.fechaCaducidad : '**/**'
-                                }}</span>
+                            <span class="value fw-medium">
+                                @if (isVisible(tarjeta.id)) {
+                                    {{ tarjeta.fechaCaducidad }}
+                                }
+                                @else {
+                                    **/**
+                                }
+                            </span>
                         </div>
                         <div class="card-cvv">
                             <span class="label d-block small opacity-75">CVV</span>
-                            <span class="value fw-medium">{{ isVisible(tarjeta.id) ? tarjeta.cvv : '***' }}</span>
+                            <span class="value fw-medium">
+                                @if (isVisible(tarjeta.id)) {
+                                    {{ tarjeta.cvv }}
+                                }
+                                @else {
+                                    ***
+                                }
+                            </span>
                         </div>
                     </div>
                 </div>

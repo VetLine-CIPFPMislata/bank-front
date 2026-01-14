@@ -40,26 +40,26 @@ export class LoginService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    
+
     return this.miHttp.post(`${this.url}/logout`, {}, { headers });
   }
 
-    clearAuth(): void {
+  clearAuth(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userName');
   }
 
-    isAuthenticated(): boolean {
+  isAuthenticated(): boolean {
     return this.getToken() !== null;
 
   }
 
-   getCurrentUser(): Observable<Usuario> {
+  getCurrentUser(): Observable<Usuario> {
     const token = this.getToken();
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    
+
     return this.miHttp.get<Usuario>(`${this.url}/me`, { headers });
   }
 }  
