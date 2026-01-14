@@ -1,9 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpService } from '../../services/http-service';
 import { LoginService } from '../../services/login-service';
+import { Banco } from '../../services/banco';
 import { UpperCasePipe } from '@angular/common';
 import { Tarjeta } from '../../Models/tarjeta';
+import { Cuenta } from '../../Models/cuenta';
 @Component({
   selector: 'app-detail-cuenta',
 
@@ -11,8 +12,12 @@ import { Tarjeta } from '../../Models/tarjeta';
   templateUrl: './detail-cuenta.html',
   styleUrl: './detail-cuenta.scss'
 })
-export class DetailCuentaComponent {
+export class DetailCuentaComponent implements OnInit {
+  @Input() cuentaId!: number;
   tarjetasVisibles = new Set<number>();
+
+
+  constructor (private bancoService: Banco) {}
 
   toggleMostrarDatos(id: number) {
     if (this.tarjetasVisibles.has(id)) {
@@ -33,44 +38,33 @@ export class DetailCuentaComponent {
     }
     return num.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
   }
-  private httpService = inject(HttpService);
   private loginService = inject(LoginService);
   private router = inject(Router);
   tarjetas: Tarjeta[] = [];
 
 
-
   ngOnInit() {
-    this.tarjetas = [
-      { id: 1, titular: 'Juan Perez Garcia', numero: '4100000300012344', fechaCaducidad: '12/25', cvv: '123', cuentaId: 1 },
-      { id: 2, titular: 'Juan Perez Garcia', numero: '4100003000056789', fechaCaducidad: '12/25', cvv: '456', cuentaId: 2 },
-      { id: 3, titular: 'Maria Lopez Garcia', numero: '4100000500090123', fechaCaducidad: '12/25', cvv: '789', cuentaId: 3 },
-      { id: 4, titular: 'Antonio', numero: '4100000010034567', fechaCaducidad: '12/25', cvv: '012', cuentaId: 4 }
-    ];
-
-    // Uncomment when ready
-    /*
-    const clientId = this.loginService.getClientId();
-    if (clientId) {
-        this.httpService.getCuentasByCliente(clientId).subscribe({
-          next: (data) => {
-            this.cuentas = data;
-          },
-          error: (err) => console.error('Error al cargar cuentas', err)
-        });
-    } else {
-        this.router.navigate(['/login']);
+    if (this.cuentaId) {
+      this.verDetalles(this.cuentaId);
     }
-   */
+  }
+
+  ngOnChanges() {
+    if (this.cuentaId) {
+      this.verDetalles(this.cuentaId);
+    }
   }
 
 
 
-  verDetalles(id: number) {
-    console.log('Ver detalles de cuenta:', id);
-    this.httpService.getCuenta(id).subscribe({
-      next: (data) => console.log('Detalles recibidos:', data),
-      error: (err) => console.error('Error al obtener cuenta', err)
+  verDetalles(cuentaId: number) {
+    console.log('Ver detalles de cuenta:', cuentaId);
+    this.bancoService.getTarjetasByCuenta(cuentaId).subscribe({
+      next: (data) => {
+        console.log('Tarjetas cargadas:', data);
+        this.tarjetas = data;
+      },
+      error: (err) => console.error('Error al obtener tarjetas', err)
     });
   }
 

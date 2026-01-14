@@ -41,6 +41,11 @@ export class Login {
 
         this.loginService.getCurrentUser().subscribe({
           next: (user) => {
+            console.log('Usuario obtenido:', user);
+            // Guardar el clientId y username en localStorage
+            localStorage.setItem('clientId', user.id.toString());
+            localStorage.setItem('username', user.username);
+            
             this.isLoading = false;
             this.router.navigate(['/home']);
           },

@@ -4,14 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Movimiento } from '../Models/movimientos';
 import { Cuenta } from '../Models/cuenta';
-
-export interface Tarjeta {
-  id: number;
-  numero: string;
-  fechaExpiracion: string;
-  cvv: string;
-  cuentaId: number;
-}
+import { Tarjeta } from '../Models/tarjeta';
 
 @Injectable({
   providedIn: 'root',
@@ -35,11 +28,11 @@ export class Banco {
     return this.Mihttp.get<Cuenta[]>(`${this.cuentasUrl}/${clientId}/cuentas`, { headers: this.getAuthHeaders() });
   }
 
-  getTarjetasByCliente(clientId: number): Observable<Tarjeta[]> {
-    return this.Mihttp.get<Tarjeta[]>(`${this.tarjetasMovimientosUrl}/${clientId}/tarjetas`, { headers: this.getAuthHeaders() });
+  getTarjetasByCuenta(cuentaId: number): Observable<Tarjeta[]> {
+    return this.Mihttp.get<Tarjeta[]>(`${this.tarjetasMovimientosUrl}/${cuentaId}/tarjetas`, { headers: this.getAuthHeaders() });
   }
 
-  getMovimientosByCliente(clientId: number): Observable<Movimiento[]> {
-    return this.Mihttp.get<Movimiento[]>(`${this.tarjetasMovimientosUrl}/${clientId}/movimientos`, { headers: this.getAuthHeaders() });
+  getMovimientosByCuenta(cuentaId: number): Observable<Movimiento[]> {
+    return this.Mihttp.get<Movimiento[]>(`${this.tarjetasMovimientosUrl}/${cuentaId}/movimientos`, { headers: this.getAuthHeaders() });
   }
 }

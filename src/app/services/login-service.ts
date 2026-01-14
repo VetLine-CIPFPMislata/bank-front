@@ -47,6 +47,8 @@ export class LoginService {
   clearAuth(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userName');
+    localStorage.removeItem('clientId');
+    localStorage.removeItem('username');
   }
 
   isAuthenticated(): boolean {

@@ -1,9 +1,9 @@
-<div class="container-fluid p-4">
+<div class="container-fluid p-4 inicio">
     <div class="row mb-5">
         <div class="col-12">
-            <div class="welcome-section">
-                <h1 class="welcome-title">Bienvenido, <span class="text-primary">{{usuario.username}}</span></h1>
-                <p class="welcome-subtitle">Aquí está el resumen de tu cuenta bancaria</p>
+            <div class="inicio__welcome">
+                <h1 class="inicio__welcome-title">Bienvenido, <span class="text-primary">{{usuario.username}}</span></h1>
+                <p class="inicio__welcome-subtitle">Aquí está el resumen de tu cuenta bancaria</p>
             </div>
         </div>
     </div>
@@ -11,34 +11,44 @@
     <div class="row">
         @for (cuenta of cuentas; track $index) {
         <div class="col-lg-4">
-            <div class="balance-card" routerLink="/detail-cuenta" routerLinkActive="active">
-                <div class="balance-icon">
-                    <i class="bi bi-piggy-bank"></i>
+            <div class="inicio__balance-card" 
+                 [ngClass]="{'inicio__balance-card--selected': cuentaSeleccionada?.id === cuenta.id}"
+                 (click)="seleccionarCuenta(cuenta)"
+                 style="cursor: pointer;">
+                <div class="inicio__balance-icon">
+                    <i class="bi bi-wallet"></i>
                 </div>
-                <p class="balance-label">Saldo total</p>
-                <h2 class="balance-amount">{{cuenta.saldo | currency:'EUR':'symbol':'1.2-2'}}</h2>
-                <p class="balance-iban">{{cuenta.iban}}</p>
+                <p class="inicio__balance-label">Saldo total</p>
+                <h2 class="inicio__balance-amount">{{cuenta.saldo | currency:'EUR':'symbol':'1.2-2'}}</h2>
+                <p class="inicio__balance-iban">{{cuenta.iban}}</p>
             </div>
         </div>
         }
     </div>
     <hr class="divider">
 
-    <app-detail-cuenta></app-detail-cuenta>
-    <hr class="divider">
+    @if (cuentaSeleccionada) {
+        <app-detail-cuenta [cuentaId]="cuentaSeleccionada.id"></app-detail-cuenta>
+        <hr class="divider">
+    }
 
     <div class="row">
+        <div class="col-12">
+            <hr class="inicio__divider">
+        </div>
+    </div>
+    <div class="row mb-4">
         <div class="col-lg-12">
-            <div class="card movements-card">
-                <div class="card-header movements-header">
-                    <div class="header-content">
+            <div class="card inicio__movements">
+                <div class="card-header inicio__movements-header">
+                    <div class="inicio__movements-header-content">
                         <i class="bi bi-bar-chart"></i>
                         <h5 class="mb-0">Últimos Movimientos</h5>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover inicio__table">
                             <thead>
                                 <tr>
                                     <th>Fecha</th>
@@ -48,28 +58,27 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                
 
                                 @for (movimiento of movimientos; track movimiento.id) {
                                 <tr>
-                                    <td>{{ movimiento.fecha | date:'shortDate' }}</td>
+                                    <td>{{ movimiento.fechaMovimiento | date:'shortDate' }}</td>
                                     <td>{{ movimiento.concepto }}</td>
                                     <td>
-                                        @if (movimiento.importe > 0) {
-                                        <span class="text-success">{{ movimiento.importe | currency:'EUR' }}</span>
-                                        }
-                                        @else {
-                                        <span class="text-danger">{{ movimiento.importe | currency:'EUR' }}</span>
+                                        @if (movimiento.tipoMovimientoBancario === 'DEBE') {
+                                            <span class="inicio__text--danger">-{{ movimiento.importe | currency:'EUR' }}</span>
+                                        } @else {
+                                            <span class="inicio__text--success">+{{ movimiento.importe | currency:'EUR' }}</span>
                                         }
                                     </td>
                                     <td>
-                                        @if (movimiento.tipo.includes('DEBE')) {
-                                        <span class="text-danger">{{ movimiento.tipo }}</span>
-                                        }
-                                        @else {
-                                        <span class="text-success">{{ movimiento.tipo }}</span>
+                                        @if (movimiento.tipoMovimientoBancario === 'DEBE') {
+                                            <span class="inicio__text--danger">{{ movimiento.tipoMovimientoBancario }}</span>
+                                            
+                                        } @else {
+                                            <span class="inicio__text--success">{{ movimiento.tipoMovimientoBancario }}</span>
                                         }
                                     </td>
-                                </tr>
                                 }
                                 @empty {
                                 <tr>
@@ -82,7 +91,7 @@
                         </table>
                     </div>
                     <div class="text-end mt-4">
-                        <a routerLink="/movimientos-bancarios" class="btn btn-view-all">
+                        <a routerLink="/movimientos-bancarios" class="btn inicio__btn">
                             <span>Ver todos los movimientos</span>
                             <i class="bi bi-arrow-right"></i>
                         </a>

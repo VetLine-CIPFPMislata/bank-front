@@ -1,73 +1,80 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UsuarioRequest } from '../../Models/usuarioRequest';
 import { Cuenta } from '../../Models/cuenta';
 import { Movimiento } from '../../Models/movimientos';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgClass } from '@angular/common';
 import { DatePipe } from '@angular/common';
+import { Banco } from '../../services/banco';
 import { DetailCuentaComponent } from "../detail-cuenta/detail-cuenta";
+
 
 @Component({
   selector: 'app-inicio',
-  imports: [RouterLink, CurrencyPipe, DatePipe, RouterLinkActive, DetailCuentaComponent],
+  imports: [RouterLink, CurrencyPipe, DatePipe, RouterLinkActive, DetailCuentaComponent, NgClass],
   templateUrl: './inicio.html',
   styleUrl: './inicio.scss',
 })
-export class Inicio {
-usuario!: UsuarioRequest;
+export class Inicio implements OnInit {
+usuario: UsuarioRequest = { username: '', password: '' };
 cuenta!: Cuenta;
-cuentas!: Cuenta[];
+cuentas: Cuenta[] = [];
 movimiento!: Movimiento;
-movimientos!: Movimiento[];
+movimientos: Movimiento[] = [];
+cuentaSeleccionada: Cuenta | null = null;
 
-constructor() {
-    this.usuario = {
-        username: 'Álvaro',
-        password: 'password123'
-    };
-    this.cuentas = [
-        {
-            id: 1,
-            iban: 'ES76 2100 1234 5678 9012 3456',
-            saldo: 2500.75
-        },
-        {
-            id: 2,
-            iban: 'ES12 3456 7890 1234 5678 9012',
-            saldo: 1500.00
-        },
-        {
-            id: 3,
-            iban: 'ES98 7654 3210 9876 5432 1098',
-            saldo: 3200.40
+constructor(private bancoService: Banco) {}
+
+ngOnInit() {
+
+    const username = localStorage.getItem('username') || 'Usuario';
+    this.usuario = { username: username, password: '' };
+    
+
+    const clientId = this.getClientId();
+    
+    if (clientId) {
+      this.loadCuentas(clientId);
+    }
+}
+
+private getClientId(): number | null {
+    const clientIdStr = localStorage.getItem('clientId');
+    return clientIdStr ? parseInt(clientIdStr, 10) : null;
+}
+
+private loadCuentas(clientId: number): void {
+    this.bancoService.getCuentasByCliente(clientId).subscribe({
+      next: (cuentas) => {
+        this.cuentas = cuentas;
+        if (cuentas.length > 0) {
+          this.cuentaSeleccionada = cuentas[0];
+          this.loadMovimientosPorCuenta(this.cuentaSeleccionada.id);
         }
-    ];
-  
-    this.movimientos = [
-        {
-            id: 1,
-            cuentaId: 1,
-            fecha: new Date('2024-06-01'),
-            concepto: 'Compra en supermercado',
-            importe: -75.50,
-            tipo: ['DEBE']
-        },
-        {
-            id: 2,
-            cuentaId: 1,
-            fecha: new Date('2024-06-03'),
-            concepto: 'Ingreso nómina',
-            importe: 1500.00,
-            tipo: ['HABER']
-        },
-        {
-            id: 3,
-            cuentaId: 1,
-            fecha: new Date('2024-06-05'),
-            concepto: 'Pago factura luz',
-            importe: -60.25,
-            tipo: ['DEBE']
-        }
-    ];
-  }
+      },
+      error: (error) => {
+        console.error('Error al cargar las cuentas:', error);
+      }
+    });
+}
+
+private loadMovimientosPorCuenta(cuentaId: number): void {
+    console.log('Cargando movimientos para cuenta:', cuentaId);
+    this.bancoService.getMovimientosByCuenta(cuentaId).subscribe({
+      next: (movimientos) => {
+        console.log('Movimientos cargados:', movimientos.length);
+        this.movimientos = movimientos
+          .slice(0, 5);
+      },
+      error: (error) => {
+        console.error('Error al cargar los movimientos:', error);
+        this.movimientos = [];
+      }
+    });
+}
+
+seleccionarCuenta(cuenta: Cuenta): void {
+    this.cuentaSeleccionada = cuenta;
+    this.loadMovimientosPorCuenta(cuenta.id);
+}
 }

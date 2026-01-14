@@ -26,14 +26,14 @@
 
                 <div class="card-middle text-center">
                     <div class="card-number font-monospace">
-                        {{ formatNumTarjeta(tarjeta.numero, tarjeta.id) }}
+                        {{ formatNumTarjeta(tarjeta.numeroTarjeta, tarjeta.id) }}
                     </div>
                 </div>
 
                 <div class="card-bottom d-flex justify-content-between align-items-end">
                     <div class="card-holder flex-grow-1">
                         <span class="label d-block small opacity-75">Titular</span>
-                        <span class="value fw-medium">{{ tarjeta.titular | uppercase }}</span>
+                        <span class="value fw-medium">{{ tarjeta.nombreCompleto | uppercase }}</span>
                     </div>
 
                     <div class="d-flex gap-3">
@@ -52,7 +52,7 @@
                             <span class="label d-block small opacity-75">CVV</span>
                             <span class="value fw-medium">
                                 @if (isVisible(tarjeta.id)) {
-                                    {{ tarjeta.cvv }}
+                                    {{ tarjeta.cvc }}
                                 }
                                 @else {
                                     ***

@@ -1,8 +1,8 @@
 export interface Tarjeta {
     id: number;
-    titular:string;
-    numero: string;
+    nombreCompleto: string;
+    numeroTarjeta: string;
     fechaCaducidad: string;
-    cvv: string;
-    cuentaId: number;
+    cvc: string;
+    idCuentaBancaria: number;
 }

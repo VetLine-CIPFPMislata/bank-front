@@ -1,8 +1,18 @@
+export interface TarjetaCreditoOrigen {
+    id: number;
+    numeroTarjeta: string;
+    fechaCaducidad: string;
+    cvc: string;
+    nombreCompleto: string;
+    idCuentaBancaria: number;
+}
+
 export interface Movimiento {
     id: number;
-    cuentaId: number;
-    fecha: Date;
-    concepto: string;
+    tipoMovimientoBancario: string; 
+    origenMovimientoBancario: string; 
+    tarjetaCreditoOrigen?: TarjetaCreditoOrigen;
+    fechaMovimiento: string;
     importe: number;
-    tipo: ['DEBE' | 'HABER'];
+    concepto: string;
 }
