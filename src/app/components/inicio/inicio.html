@@ -2,34 +2,40 @@
     <div class="row mb-5">
         <div class="col-12">
             <div class="inicio__welcome">
-                <h1 class="inicio__welcome-title">Bienvenido, <span class="text-primary">{{usuario.username}}</span></h1>
+                <h1 class="inicio__welcome-title">Bienvenido, <span class="text-primary">{{usuario.username}}</span>
+                </h1>
                 <p class="inicio__welcome-subtitle">Aquí está el resumen de tu cuenta bancaria</p>
             </div>
         </div>
     </div>
- 
+
     <div class="row">
         @for (cuenta of cuentas; track $index) {
         <div class="col-lg-4">
-            <div class="inicio__balance-card" 
-                 [ngClass]="{'inicio__balance-card--selected': cuentaSeleccionada?.id === cuenta.id}"
-                 (click)="seleccionarCuenta(cuenta)"
-                 style="cursor: pointer;">
-                <div class="inicio__balance-icon">
-                    <i class="bi bi-wallet"></i>
+            <div class="inicio__balance-card"
+                [ngClass]="{'inicio__balance-card--selected': cuentaSeleccionada?.id === cuenta.id}"
+                (click)="seleccionarCuenta(cuenta)" style="cursor: pointer;">
+                <div class="inicio__balance-icon"
+                    [ngClass]="{'inicio__balance-icon--selected': cuentaSeleccionada?.id === cuenta.id}">
+                    <i class="bi bi-piggy-bank"></i>
                 </div>
                 <p class="inicio__balance-label">Saldo total</p>
                 <h2 class="inicio__balance-amount">{{cuenta.saldo | currency:'EUR':'symbol':'1.2-2'}}</h2>
-                <p class="inicio__balance-iban">{{cuenta.iban}}</p>
+                <div class="d-flex align-items-center justify-content-between">
+                    <p class="inicio__balance-iban mb-0">{{formatIban(cuenta.iban)}}</p>
+                    <button class="btn btn-link p-0 text-dark opacity-50 inicio__copy-btn"
+                        (click)="copiarIban($event, cuenta.iban)" title="Copiar IBAN">
+                        <i class="bi bi-copy"></i>
+                    </button>
+                </div>
             </div>
         </div>
         }
     </div>
-    <hr class="divider">
 
     @if (cuentaSeleccionada) {
-        <app-detail-cuenta [cuentaId]="cuentaSeleccionada.id"></app-detail-cuenta>
-        <hr class="divider">
+    <app-detail-cuenta [cuentaId]="cuentaSeleccionada.id"></app-detail-cuenta>
+    <hr class="divider">
     }
 
     <div class="row">
@@ -58,29 +64,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
+
 
                                 @for (movimiento of movimientos; track movimiento.id) {
                                 <tr>
-                                    <td>{{ movimiento.fechaMovimiento | date:'shortDate' }}</td>
+                                    <td>{{ movimiento.fechaMovimiento | date:'dd/MM/yyyy' }}</td>
                                     <td>{{ movimiento.concepto }}</td>
                                     <td>
                                         @if (movimiento.tipoMovimientoBancario === 'DEBE') {
-                                            <span class="inicio__text--danger">-{{ movimiento.importe | currency:'EUR' }}</span>
+                                        <span class="inicio__text--danger">-{{ movimiento.importe | currency:'EUR'
+                                            }}</span>
                                         } @else {
-                                            <span class="inicio__text--success">+{{ movimiento.importe | currency:'EUR' }}</span>
+                                        <span class="inicio__text--success">+{{ movimiento.importe | currency:'EUR'
+                                            }}</span>
                                         }
                                     </td>
                                     <td>
-                                        @if (movimiento.tipoMovimientoBancario === 'DEBE') {
-                                            <span class="inicio__text--danger">{{ movimiento.tipoMovimientoBancario }}</span>
-                                            
-                                        } @else {
-                                            <span class="inicio__text--success">{{ movimiento.tipoMovimientoBancario }}</span>
-                                        }
+                                        {{movimiento.origenMovimientoBancario}}
                                     </td>
-                                }
-                                @empty {
+                                    }
+                                    @empty {
                                 <tr>
                                     <td colspan="4" class="text-center text-muted">
                                         No hay movimientos recientes
@@ -90,12 +93,13 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="text-end mt-4">
-                        <a routerLink="/movimientos-bancarios" class="btn inicio__btn">
-                            <span>Ver todos los movimientos</span>
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
+                    @if (movimientosFull.length > itemsToShow) {
+                    <div class="text-end mt-3">
+                        <button (click)="cargarMas()" class="btn inicio__btn">
+                            Cargar más movimientos <i class="bi bi-plus-lg me-1"></i>
+                        </button>
                     </div>
+                    }
                 </div>
             </div>
         </div>

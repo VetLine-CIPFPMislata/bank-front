@@ -41,7 +41,7 @@
                             <span class="label d-block small opacity-75">Validez</span>
                             <span class="value fw-medium">
                                 @if (isVisible(tarjeta.id)) {
-                                    {{ tarjeta.fechaCaducidad }}
+                                    {{ tarjeta.fechaCaducidad | date:'MM/yy' }}
                                 }
                                 @else {
                                     **/**

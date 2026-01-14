@@ -4,11 +4,11 @@ import { LoginService } from '../../services/login-service';
 import { Banco } from '../../services/banco';
 import { UpperCasePipe } from '@angular/common';
 import { Tarjeta } from '../../Models/tarjeta';
-import { Cuenta } from '../../Models/cuenta';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-detail-cuenta',
 
-  imports: [UpperCasePipe],
+  imports: [UpperCasePipe, DatePipe],
   templateUrl: './detail-cuenta.html',
   styleUrl: './detail-cuenta.scss'
 })

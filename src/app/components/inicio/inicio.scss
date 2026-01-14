@@ -1,4 +1,3 @@
-
 .inicio {
 
   --inicio-bg-fluid: var(--mls-sys-color-gris-3);
@@ -17,6 +16,7 @@
   --inicio-border-selected: var(--mls-sys-color-primario-7);
 
   --inicio-icon-bg: var(--mls-sys-color-primario-1);
+  --inicio-icon-selected-bg: var(--mls-sys-color-gris-1);
   --inicio-icon-color: var(--mls-sys-color-primario-7);
   --inicio-btn-bg: var(--mls-sys-color-primario-7);
   --inicio-btn-bg-hover: var(--mls-sys-color-primario-8);
@@ -37,7 +37,7 @@
   --inicio-border-radius-card: var(--mls-sys-border-radius-4);
   --inicio-border-radius-icon: var(--mls-sys-border-radius-3);
   --inicio-border-radius-btn: var(--mls-sys-border-radius-3);
-  
+
   --inicio-font-size-title: var(--mls-sys-font-size-8);
   --inicio-font-size-subtitle: var(--mls-sys-font-size-3);
   --inicio-font-size-amount: var(--mls-sys-font-size-7);
@@ -79,6 +79,7 @@
   font-size: var(--inicio-font-size-title);
   font-weight: var(--inicio-font-weight-light);
   color: var(--inicio-text-dark);
+
   span {
     font-weight: var(--inicio-font-weight-semibold);
   }
@@ -107,6 +108,7 @@
     border: var(--inicio-border-width-selected) solid var(--inicio-border-selected);
     box-shadow: var(--inicio-box-shadow-card-hover);
     background: linear-gradient(135deg, var(--inicio-balance-selected-bg-start) 0%, var(--inicio-balance-selected-bg-end) 100%);
+
   }
 }
 
@@ -121,6 +123,10 @@
   color: var(--inicio-icon-color);
   margin-bottom: var(--inicio-margin-bottom-icon);
   font-size: var(--inicio-font-size-icon-large);
+
+  &--selected {
+    background-color: var(--inicio-icon-selected-bg);
+  }
 }
 
 .inicio__balance-label {
@@ -142,6 +148,14 @@
   font-size: var(--inicio-font-size-label);
   color: var(--inicio-text-light);
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.inicio__copy-btn {
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1 !important;
+  }
 }
 
 .inicio__divider {
@@ -250,10 +264,6 @@
     transform: translateX(1px);
     color: var(--inicio-btn-text);
     text-decoration: none;
-
-    i {
-      transform: translateX(3px);
-    }
   }
 
   i {

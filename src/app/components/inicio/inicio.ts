@@ -11,39 +11,41 @@ import { DetailCuentaComponent } from "../detail-cuenta/detail-cuenta";
 
 @Component({
   selector: 'app-inicio',
-  imports: [RouterLink, CurrencyPipe, DatePipe, RouterLinkActive, DetailCuentaComponent, NgClass],
+  imports: [CurrencyPipe, DatePipe, DetailCuentaComponent, NgClass],
   templateUrl: './inicio.html',
   styleUrl: './inicio.scss',
 })
-export class Inicio implements OnInit {
-usuario: UsuarioRequest = { username: '', password: '' };
-cuenta!: Cuenta;
-cuentas: Cuenta[] = [];
-movimiento!: Movimiento;
-movimientos: Movimiento[] = [];
-cuentaSeleccionada: Cuenta | null = null;
+export class Inicio {
+  usuario: UsuarioRequest = { username: '', password: '' };
+  cuenta!: Cuenta;
+  cuentas: Cuenta[] = [];
+  movimiento!: Movimiento;
+  movimientos: Movimiento[] = [];
+  movimientosFull: Movimiento[] = [];
+  itemsToShow: number = 5;
+  cuentaSeleccionada: Cuenta | null = null;
 
-constructor(private bancoService: Banco) {}
+  constructor(private bancoService: Banco) { }
 
-ngOnInit() {
+  ngOnInit() {
 
     const username = localStorage.getItem('username') || 'Usuario';
     this.usuario = { username: username, password: '' };
-    
+
 
     const clientId = this.getClientId();
-    
+
     if (clientId) {
       this.loadCuentas(clientId);
     }
-}
+  }
 
-private getClientId(): number | null {
+  private getClientId(): number | null {
     const clientIdStr = localStorage.getItem('clientId');
     return clientIdStr ? parseInt(clientIdStr, 10) : null;
-}
+  }
 
-private loadCuentas(clientId: number): void {
+  private loadCuentas(clientId: number): void {
     this.bancoService.getCuentasByCliente(clientId).subscribe({
       next: (cuentas) => {
         this.cuentas = cuentas;
@@ -56,25 +58,46 @@ private loadCuentas(clientId: number): void {
         console.error('Error al cargar las cuentas:', error);
       }
     });
-}
+  }
 
-private loadMovimientosPorCuenta(cuentaId: number): void {
+  private loadMovimientosPorCuenta(cuentaId: number): void {
     console.log('Cargando movimientos para cuenta:', cuentaId);
+    this.itemsToShow = 5; // Reiniciar al cambiar de cuenta
     this.bancoService.getMovimientosByCuenta(cuentaId).subscribe({
       next: (movimientos) => {
         console.log('Movimientos cargados:', movimientos.length);
-        this.movimientos = movimientos
-          .slice(0, 5);
+        this.movimientosFull = movimientos;
+        this.updateVisibleMovements();
       },
       error: (error) => {
         console.error('Error al cargar los movimientos:', error);
+        this.movimientosFull = [];
         this.movimientos = [];
       }
     });
-}
+  }
 
-seleccionarCuenta(cuenta: Cuenta): void {
+  updateVisibleMovements(): void {
+    this.movimientos = this.movimientosFull.slice(0, this.itemsToShow);
+  }
+
+  cargarMas(): void {
+    this.itemsToShow += 5;
+    this.updateVisibleMovements();
+  }
+
+  seleccionarCuenta(cuenta: Cuenta): void {
     this.cuentaSeleccionada = cuenta;
     this.loadMovimientosPorCuenta(cuenta.id);
-}
+  }
+
+  formatIban(iban: string): string {
+    return iban ? iban.replace(/(.{4})/g, '$1 ').trim() : '';
+  }
+
+  copiarIban(event: Event, iban: string): void {
+    event.stopPropagation();
+    navigator.clipboard.writeText(iban).then(() => {
+    });
+  }
 }
