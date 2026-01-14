@@ -1,55 +1,57 @@
-<div class="login-container">
-    <div class="login-wrapper">
-        <div class="card login-card">
-            <div class="card-body">
+<div class="login">
+    <div class="login__container">
+        <div class="login__wrapper">
+            <div class="card login__card">
+                <div class="card-body">
 
-                <div class="login-header">
-                    <div class="logo-circle">
-                        <img src="assets/imagen-banco.png" alt="Banco Logo" class="login-logo" width="60" height="60">
+                    <div class="login__header">
+                        <div class="login__logo-circle">
+                            <img src="assets/imagen-banco.png" alt="Banco Logo" class="login__logo-img" width="60" height="60">
+                        </div>
+                        <h1 class="login__title">Banco</h1>
+                        <p class="login__subtitle">Inicia sesión en tu cuenta</p>
                     </div>
-                    <h1 class="login-title">Banco</h1>
-                    <p class="login-subtitle">Inicia sesión en tu cuenta</p>
+
+                    <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login__form">
+
+                        <div class="form-group">
+                            <div class="login__input-wrapper">
+                                <i class="bi bi-person login__input-icon"></i>
+                                <input type="email" id="username" class="form-control login__input"
+                                    placeholder="Usuario o correo" required [(ngModel)]="usuario.username" name="username"
+                                    #emailInput="ngModel">
+                            </div>
+                            @if(emailInput.invalid && emailInput.touched){
+                            <p class="login__error-message">El usuario es obligatorio</p>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <div class="login__input-wrapper">
+                                <i class="bi bi-lock login__input-icon"></i>
+                                <input type="password" id="password" class="form-control login__input"
+                                    placeholder="Contraseña" required [(ngModel)]="usuario.password" name="password"
+                                    #passwordInput="ngModel">
+                            </div>
+                            @if(passwordInput.invalid && passwordInput.touched){
+                            <p class="login__error-message">La contraseña es obligatoria</p>
+                            }
+                        </div>
+
+                        @if(errorMessage) {
+                        <p class="login__error-message login__error-message--main">{{ errorMessage }}</p>
+                        }
+
+                        <button type="submit" class="btn login__btn" [disabled]="loginForm.invalid || isLoading">
+                            @if(isLoading) {
+                            <span>Cargando...</span>
+                            } @else {
+                            <span>Ingresar</span>
+                            <i class="bi bi-arrow-right"></i>
+                            }
+                        </button>
+                    </form>
                 </div>
-
-                <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
-
-                    <div class="form-group">
-                        <div class="input-wrapper">
-                            <i class="bi bi-person input-icon"></i>
-                            <input type="email" id="username" class="form-control login-input"
-                                placeholder="Usuario o correo" required [(ngModel)]="usuario.username" name="username"
-                                #emailInput="ngModel">
-                        </div>
-                        @if(emailInput.invalid && emailInput.touched){
-                        <p class="error-message">El usuario es obligatorio</p>
-                        }
-                    </div>
-
-                    <div class="form-group">
-                        <div class="input-wrapper">
-                            <i class="bi bi-lock input-icon"></i>
-                            <input type="password" id="password" class="form-control login-input"
-                                placeholder="Contraseña" required [(ngModel)]="usuario.password" name="password"
-                                #passwordInput="ngModel">
-                        </div>
-                        @if(passwordInput.invalid && passwordInput.touched){
-                        <p class="error-message">La contraseña es obligatoria</p>
-                        }
-                    </div>
-
-                    @if(errorMessage) {
-                    <p class="error-message login-error">{{ errorMessage }}</p>
-                    }
-
-                    <button type="submit" class="btn btn-login" [disabled]="loginForm.invalid || isLoading">
-                        @if(isLoading) {
-                        <span>Cargando...</span>
-                        } @else {
-                        <span>Ingresar</span>
-                        <i class="bi bi-arrow-right"></i>
-                        }
-                    </button>
-                </form>
             </div>
         </div>
     </div>

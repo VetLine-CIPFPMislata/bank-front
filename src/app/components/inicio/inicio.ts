@@ -7,6 +7,8 @@ import { CurrencyPipe, NgClass } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { Banco } from '../../services/banco';
 import { DetailCuentaComponent } from "../detail-cuenta/detail-cuenta";
+import { Usuario } from '../../Models/usuario';
+import { LoginService } from '../../services/login-service';
 
 
 @Component({
@@ -16,6 +18,7 @@ import { DetailCuentaComponent } from "../detail-cuenta/detail-cuenta";
   styleUrl: './inicio.scss',
 })
 export class Inicio {
+  usuarioNombre: string = '';
   usuario: UsuarioRequest = { username: '', password: '' };
   cuenta!: Cuenta;
   cuentas: Cuenta[] = [];
@@ -25,13 +28,20 @@ export class Inicio {
   itemsToShow: number = 5;
   cuentaSeleccionada: Cuenta | null = null;
 
-  constructor(private bancoService: Banco) { }
+  constructor(private bancoService: Banco, private loginService: LoginService) { }
 
   ngOnInit() {
-
-    const username = localStorage.getItem('username') || 'Usuario';
-    this.usuario = { username: username, password: '' };
-
+    this.loginService.getCurrentUser().subscribe({
+      next: (usuario) => {
+        this.usuarioNombre = `${usuario.nombre} ${usuario.apellido1}`;
+        this.usuario = { username: usuario.username, password: '' };
+      },
+      error: (error) => {
+        const username = localStorage.getItem('username') || 'Usuario';
+        this.usuario = { username: username, password: '' };
+        this.usuarioNombre = username;
+      }
+    });
 
     const clientId = this.getClientId();
 
@@ -55,22 +65,18 @@ export class Inicio {
         }
       },
       error: (error) => {
-        console.error('Error al cargar las cuentas:', error);
       }
     });
   }
 
   private loadMovimientosPorCuenta(cuentaId: number): void {
-    console.log('Cargando movimientos para cuenta:', cuentaId);
-    this.itemsToShow = 5; // Reiniciar al cambiar de cuenta
+    this.itemsToShow = 5;
     this.bancoService.getMovimientosByCuenta(cuentaId).subscribe({
       next: (movimientos) => {
-        console.log('Movimientos cargados:', movimientos.length);
         this.movimientosFull = movimientos;
         this.updateVisibleMovements();
       },
       error: (error) => {
-        console.error('Error al cargar los movimientos:', error);
         this.movimientosFull = [];
         this.movimientos = [];
       }
