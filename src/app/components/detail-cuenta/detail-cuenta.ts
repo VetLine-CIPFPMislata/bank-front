@@ -17,7 +17,7 @@ export class DetailCuentaComponent implements OnInit {
   tarjetasVisibles = new Set<number>();
 
 
-  constructor (private bancoService: Banco) {}
+  constructor(private bancoService: Banco) { }
 
   toggleMostrarDatos(id: number) {
     if (this.tarjetasVisibles.has(id)) {
@@ -66,15 +66,5 @@ export class DetailCuentaComponent implements OnInit {
       },
       error: (err) => console.error('Error al obtener tarjetas', err)
     });
-  }
-
-  verTarjetas(id: number) {
-    console.log('Ver tarjetas de cuenta:', id);
-    // TODO: Implement navigation or fetch cards
-  }
-
-  verMovimientos(id: number) {
-    console.log('Ver movimientos de cuenta:', id);
-    // TODO: Implement navigation
   }
 }
