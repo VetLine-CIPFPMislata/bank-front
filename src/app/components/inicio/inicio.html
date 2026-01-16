@@ -14,7 +14,7 @@
         <div class="col-lg-4">
             <div class="inicio__balance-card"
                 [ngClass]="{'inicio__balance-card--selected': cuentaSeleccionada?.id === cuenta.id}"
-                (click)="seleccionarCuenta(cuenta)" style="cursor: pointer;">
+                (click)="seleccionarCuenta(cuenta)">
                 <div class="inicio__balance-icon"
                     [ngClass]="{'inicio__balance-icon--selected': cuentaSeleccionada?.id === cuenta.id}">
                     <i class="bi bi-piggy-bank"></i>

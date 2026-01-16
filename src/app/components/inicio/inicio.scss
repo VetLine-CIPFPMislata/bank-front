@@ -92,6 +92,7 @@
 }
 
 .inicio__balance-card {
+  cursor: pointer;
   background: linear-gradient(135deg, var(--inicio-balance-bg-start) 0%, var(--inicio-balance-bg-end) 100%);
   border: var(--inicio-border-width-default) solid var(--inicio-border-color);
   border-radius: var(--inicio-border-radius-card);

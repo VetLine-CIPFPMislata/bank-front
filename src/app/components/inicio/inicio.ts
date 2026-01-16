@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component} from '@angular/core';
 import { UsuarioRequest } from '../../Models/usuarioRequest';
 import { Cuenta } from '../../Models/cuenta';
 import { Movimiento } from '../../Models/movimientos';
@@ -7,7 +6,6 @@ import { CurrencyPipe, NgClass } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { Banco } from '../../services/banco';
 import { DetailCuentaComponent } from "../detail-cuenta/detail-cuenta";
-import { Usuario } from '../../Models/usuario';
 import { LoginService } from '../../services/login-service';
 
 
@@ -65,6 +63,7 @@ export class Inicio {
         }
       },
       error: (error) => {
+        console.error('Error al cargar cuentas:', error);
       }
     });
   }
