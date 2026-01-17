@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { UsuarioRequest } from '../../Models/usuarioRequest';
 import { Cuenta } from '../../Models/cuenta';
 import { Movimiento } from '../../Models/movimientos';
@@ -72,7 +72,7 @@ export class Inicio {
     this.itemsToShow = 5;
     this.bancoService.getMovimientosByCuenta(cuentaId).subscribe({
       next: (movimientos) => {
-        this.movimientosFull = movimientos;
+        this.movimientosFull = movimientos.sort((a, b) => new Date(b.fechaMovimiento).getTime() - new Date(a.fechaMovimiento).getTime());
         this.updateVisibleMovements();
       },
       error: (error) => {

@@ -68,7 +68,7 @@
 
                                 @for (movimiento of movimientos; track movimiento.id) {
                                 <tr>
-                                    <td>{{ movimiento.fechaMovimiento | date:'dd/MM/yyyy' }}</td>
+                                    <td>{{ movimiento.fechaMovimiento | date:'dd/MM/yyyy HH:mm' }}</td>
                                     <td>{{ movimiento.concepto }}</td>
                                     <td>
                                         @if (movimiento.tipoMovimientoBancario === 'DEBE') {
