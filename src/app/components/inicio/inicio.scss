@@ -58,11 +58,14 @@
   --inicio-gap-header: var(--mls-sys-gap-2);
 
   --inicio-width-icon: var(--mls-sys-width-4);
+  --inicio-width-container: var(--mls-sys-width-12);
   --inicio-height-icon: var(--mls-sys-height-4);
-  --inicio-border-width-default: 1px;
-  --inicio-border-width-selected: 2px;
-  --inicio-border-width-divider: 1px;
-  --inicio-border-width-table: 2px;
+  --inicio-border-width-default: var( --inicio-margin-bottom-welcome);
+  --inicio-border-width-selected: var( --inicio-margin-bottom-welcome);
+  --inicio-border-width-divider:var( --inicio-margin-bottom-welcome);
+  --inicio-border-width-table: var( --inicio-margin-bottom-welcome);
+  --inicio-scrollbar-width: var(--mls-sys-width-1);
+  
 }
 
 
@@ -170,6 +173,33 @@
   border-radius: var(--inicio-border-radius-card);
   box-shadow: var(--inicio-box-shadow-card);
   overflow: hidden;
+
+  .card-body {
+    padding: 0;
+  }
+
+  .table-responsive {
+    max-height: var(--inicio-width-container);
+    overflow-y: auto;
+    position: relative;
+
+    &::-webkit-scrollbar {
+      width: var(--inicio-scrollbar-width);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--inicio-balance-bg-start);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--inicio-border-color);
+      border-radius: var(--inicio-margin-bottom-welcome);
+
+      &:hover {
+        background: var(--inicio-text-light);
+      }
+    }
+  }
 }
 
 .inicio__movements-header {
@@ -202,6 +232,9 @@
   thead {
     background-color: var(--inicio-balance-bg-end);
     border-bottom: var(--inicio-border-width-table) solid var(--inicio-border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 
     th {
       border: none;
