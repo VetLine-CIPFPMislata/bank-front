@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://admin-vetline.producciondaw.cip.fpmislata.com/",
+    "target": "http://bank-back-vetline.producciondaw.cip.fpmislata.com/",
     "secure": false,
     "changeOrigin": true
   }
