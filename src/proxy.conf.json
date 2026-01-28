@@ -1,7 +1,0 @@
-{
-  "/api": {
-    "target": "http://back-bank:8083",
-    "secure": false,
-    "changeOrigin": true
-  }
-}
