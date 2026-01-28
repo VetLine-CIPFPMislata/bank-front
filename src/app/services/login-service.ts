@@ -13,7 +13,7 @@ export class LoginService {
 
   private miHttp = inject(HttpClient);
 
-  private url: string = 'http://store-back-vetline.producciondaw.cip.fpmislata.com/api/auth';
+  private url: string = 'http://bank-back-vetline.producciondaw.cip.fpmislata.com/api/auth';
   //ng serve --proxy-config src/proxy.conf.json
 
   setToken(token: string): void {
