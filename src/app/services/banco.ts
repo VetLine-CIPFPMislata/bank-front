@@ -10,7 +10,7 @@ import { Tarjeta } from '../Models/tarjeta';
   providedIn: 'root',
 })
 export class Banco {
-  private baseUrl = 'http://bank-back-vetline.producciondaw.cip.fpmislata.com/api';
+  private baseUrl = '/api';
   private cuentasUrl = `${this.baseUrl}/clientes`;
   private tarjetasMovimientosUrl=  `${this.baseUrl}/cuentas`;
 
